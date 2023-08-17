@@ -2,8 +2,6 @@ from abc import ABC, abstractmethod
 
 
 class SystemUser(ABC):
-    #использование слотов для экономии памяти (и + в задании сказано использовать слоты, так что имеет место быть
-    __slots__ = ('f_name', 'l_name', 'age', 'login', 'password')
 
     @abstractmethod
     def __init__(self, f_name: str, l_name: str, age: int, login: str, password: str):
@@ -32,14 +30,15 @@ class SystemUser(ABC):
     def change_password(self, old_password, new_password):
         if self.password == old_password:
             self.password = new_password
-
+            
 
 class DigitalWallet:
     def __init__(self):
-        self.balance = 0
+        self._balance = 0
 
-    def get_balance(self):
-        return self.balance
+    @property
+    def balance(self):
+        return self._balance
 
     def deposit_money(self, val):
         """
@@ -47,7 +46,7 @@ class DigitalWallet:
         :param val: сумма пополнения
         :return: None
         """
-        self.balance += val
+        self._balance += val
 
     def withdraw_money(self, val):
         """
@@ -55,8 +54,8 @@ class DigitalWallet:
         :param val: сумма списания
         :return: None
         """
-        if val <= self.balance:
-            self.balance -= val
+        if val <= self._balance:
+            self._balance -= val
 
 
 class User(SystemUser, DigitalWallet):
